@@ -1,0 +1,28 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+config:
+  target: "http://localhost:3000"
+  socketio:
+  transports: ["websocket"]
+  phases:
+    - duration: 10
+      arrivalRate: 1
+
+scenarios:
+  - name: "Names and Messages"
+    engine: "socketio"
+    flow:
+      - get:
+          url: "/"
+      - emit:
+          channel: "chat"
+          data: {
+            "name": "kevin", 
+            "message": "hello"
+          }
+          acknowledge:
+          match:
+            json: "$.0.status"
+            value: "ok"
